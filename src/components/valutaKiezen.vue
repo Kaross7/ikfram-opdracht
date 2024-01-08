@@ -335,6 +335,7 @@
     </select>
     </div>
 
+  </section>
 
 </template>
 
