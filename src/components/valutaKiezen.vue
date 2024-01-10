@@ -1,17 +1,23 @@
 <template>
   <section>
     <div>
-  <input
-    type="number" 
-    v-model.number="bedrag"
-    placeholder="Voer bedrag in"
-    class="input-bedrag"
-  />
+      <input
+        type="number"
+        v-model.number="bedrag"
+        @input="resetKnopStatus"
+        placeholder="Voer bedrag in"
+        class="input-bedrag"
+      />
     </div>
 
     <div>
       <label for="vanValuta">Van:</label>
-      <select name="vanValuta" v-model="eersteValuta" @change="verkrijgData" class="dropdown">
+      <select
+        name="vanValuta"
+        v-model="eersteValuta"
+        @change="verkrijgData"
+        class="dropdown"
+      >
         <option value="EUR">EUR</option>
         <option value="AED">AED</option>
         <option value="AFN">AFN</option>
@@ -178,7 +184,12 @@
     </div>
     <div>
       <label for="naarValuta">Naar:</label>
-      <select name="naarValuta" v-model="tweedeValuta" @change="berekenConversie" class="dropdown">
+      <select
+        name="naarValuta"
+        v-model="tweedeValuta"
+        @change="berekenConversie"
+        class="dropdown"
+      >
         <option value="EUR">EUR</option>
         <option value="AED">AED</option>
         <option value="AFN">AFN</option>
@@ -346,9 +357,12 @@
 
     <button @click="verkrijgData">Wisselkoers Ophalen</button>
 
-    <div v-if="geconverteerdBedrag">
-      <p>{{ bedrag }} {{ eersteValuta }} is gelijk aan {{ geconverteerdBedrag }} {{ tweedeValuta }}</p>
-    </div>
+      <div v-if="geconverteerdBedrag && bedrag && isKnopGeklikt" class="conversie-resultaat">
+        <span class="bedrag-weergave">
+          {{ bedrag }} {{ eersteValuta }} is gelijk aan {{ geconverteerdBedrag }} {{ tweedeValuta }}
+        </span>
+        <button @click="resetConversie" class="andere-valuta-knop">Andere Valuta Converteren</button>
+      </div>
   </section>
 </template>
 
@@ -361,11 +375,13 @@ export default {
       tweedeValuta: "USD",
       conversieRatio: null,
       geconverteerdBedrag: null,
+      isKnopGeklikt: false,
     };
   },
 
   methods: {
     async verkrijgData() {
+      this.resetKeuzeStatus();
       try {
         const response = await fetch(`https://v6.exchangerate-api.com/v6/a8db7cdf8333daa4c2c635f5/latest/${this.eersteValuta}`);
         const data = await response.json();
@@ -374,6 +390,22 @@ export default {
       } catch (error) {
         console.error('Fout bij het ophalen van wisselkoersen', error);
       }
+      this.isKnopGeklikt = true;
+    },
+
+        resetConversie() {
+      this.bedrag = null;
+      this.geconverteerdBedrag = null;
+      this.isKnopGeklikt = false;
+    },
+
+        resetKnopStatus() {
+          if (this.bedrag == ""){
+      this.isKnopGeklikt = false;}
+    },
+
+    resetKeuzeStatus() {
+      this.isKnopGeklikt = false;
     },
 
     berekenConversie() {

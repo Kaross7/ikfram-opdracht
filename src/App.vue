@@ -168,4 +168,38 @@ input[type='number'] {
   color: #bbb;
 }
 
+.conversie-resultaat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  background-color: #4CAF50;
+  margin: 20px auto;
+  text-align: center;
+  padding: 10px;
+}
+
+.bedrag-weergave {
+  margin-bottom: 10px;
+  color: white;
+}
+
+.andere-valuta-knop {
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 8px;
+  margin: 2px 15px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+
 </style>
