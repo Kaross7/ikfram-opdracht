@@ -7,6 +7,7 @@
         @input="resetKnopStatus"
         placeholder="Voer bedrag in"
         class="input-bedrag"
+        :disabled="isKnopGeklikt"
       />
     </div>
 
@@ -17,6 +18,7 @@
         v-model="eersteValuta"
         @change="verkrijgData"
         class="dropdown"
+        :disabled="isKnopGeklikt"
       >
         <option value="EUR">EUR</option>
         <option value="AED">AED</option>
@@ -189,6 +191,7 @@
         v-model="tweedeValuta"
         @change="berekenConversie"
         class="dropdown"
+        :disabled="isKnopGeklikt"
       >
         <option value="EUR">EUR</option>
         <option value="AED">AED</option>
@@ -355,7 +358,7 @@
       </select>
     </div>
 
-    <button @click="verkrijgData">Wisselkoers Ophalen</button>
+    <button @click="verkrijgData" :disabled="!bedrag">Wisselkoers Ophalen</button>
 
       <div v-if="geconverteerdBedrag && bedrag && isKnopGeklikt" class="conversie-resultaat">
         <span class="bedrag-weergave">
@@ -381,7 +384,6 @@ export default {
 
   methods: {
     async verkrijgData() {
-      this.resetKeuzeStatus();
       try {
         const response = await fetch(`https://v6.exchangerate-api.com/v6/a8db7cdf8333daa4c2c635f5/latest/${this.eersteValuta}`);
         const data = await response.json();
@@ -396,15 +398,6 @@ export default {
         resetConversie() {
       this.bedrag = null;
       this.geconverteerdBedrag = null;
-      this.isKnopGeklikt = false;
-    },
-
-        resetKnopStatus() {
-          if (this.bedrag == ""){
-      this.isKnopGeklikt = false;}
-    },
-
-    resetKeuzeStatus() {
       this.isKnopGeklikt = false;
     },
 
